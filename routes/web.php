@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', function () {
+Route::get('/', function () {
     return view('login');
 });
 
-Route::post('/login', function (Illuminate\Http\Request $request) {
+Route::post('/', function (Illuminate\Http\Request $request) {
     return back()->with('status', 'Login diproses');
 })->name('login.post');
