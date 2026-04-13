@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardKlienController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/login', function () {
     return view('login');
 });
 
-Route::post('/', function (Illuminate\Http\Request $request) {
+Route::post('/login', function (Illuminate\Http\Request $request) {
     return back()->with('status', 'Login diproses');
 })->name('login.post');
+
+Route::get('/',  [DashboardKlienController::class, 'index'])->name('dashboard-klien');
