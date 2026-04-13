@@ -50,7 +50,7 @@
                 </button>
 
                 <p class="text-center mt-4 text-muted">
-                    Belum punya akun? <a href="#" class="text-decoration-none fw-bold">Gabung Sekarang</a>
+                    Belum punya akun? <a href="/register" class="text-decoration-none fw-bold">Gabung Sekarang</a>
                 </p>
             </div>
 
