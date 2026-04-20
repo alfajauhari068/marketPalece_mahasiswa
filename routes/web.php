@@ -14,10 +14,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
 
+Route::post('/', function (Illuminate\Http\Request $request) {
+    return back()->with('status', 'Login diproses');
+})->name('login.post');
 
-Route::get('/page', function () {
-    return view('page');
+Route::get('/register', function () {
+    return view('register');
 });
+
+Route::post('/register', function (Illuminate\Http\Request $request) {
+    return "Proses registrasi...";
+})->name('register.post');
