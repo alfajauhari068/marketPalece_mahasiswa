@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk | Marketplace Mahasiswa</title>
+    <title>Daftar | Marketplace Mahasiswa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
             color-scheme: light;
             --bg: #F8FAFC;
-            --bg-surface: #ffffff;
-            --surface: #ffffff;
-            --surface-muted: #f8fafc;
+            --surface: #FFFFFF;
             --text: #0F172A;
             --muted: #64748B;
             --accent: #2563EB;
@@ -24,9 +22,7 @@
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg: #0F172A;
-                --bg-surface: #111827;
                 --surface: #111827;
-                --surface-muted: #111827;
                 --text: #F8FAFC;
                 --muted: #94A3B8;
                 --accent: #2563EB;
@@ -83,107 +79,90 @@
             }
         }
 
+        .dark-panel {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(37, 99, 235, 0.18));
+            color: #FFFFFF;
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.24);
+        }
+
         .brand-pill {
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.85rem 1rem;
+            padding: 0.75rem 1rem;
             border-radius: 999px;
             font-size: 0.9rem;
             font-weight: 700;
-            color: var(--accent);
-            background: var(--accent-soft);
-            margin-bottom: 1.6rem;
-        }
-
-        .brand-pill::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, #4f46e5, #60a5fa);
+            background: rgba(255, 255, 255, 0.12);
+            color: #DDE9FF;
         }
 
         .eyebrow {
-            margin: 0 0 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.28em;
+            margin: 1.2rem 0 0.8rem;
             font-size: 0.78rem;
             font-weight: 700;
-            color: var(--accent);
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: #93C5FD;
         }
 
         .headline {
             margin: 0;
-            font-size: clamp(2.4rem, 3.5vw, 3.6rem);
-            line-height: 0.98;
+            font-size: clamp(2.2rem, 3.5vw, 3.4rem);
+            line-height: 1.02;
             font-weight: 800;
         }
 
         .lead-text {
-            margin: 1.2rem 0 0;
-            max-width: 38rem;
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: var(--muted);
+            margin: 1.25rem 0 0;
+            max-width: 34rem;
+            color: rgba(255, 255, 255, 0.78);
+            line-height: 1.75;
+            font-size: 1rem;
         }
 
         .hero-visual {
             display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            margin-top: 2.25rem;
+            margin-top: 2rem;
         }
 
-        @media (max-width: 768px) {
-            .hero-visual {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .hero-card {
-            position: relative;
+        .hero-card,
+        .hero-illustration {
             border-radius: var(--radius);
-            padding: 1.75rem;
-            min-height: 220px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-soft);
-            overflow: hidden;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
+            padding: 1.5rem;
         }
 
         .hero-card h2 {
             margin: 0;
-            font-size: 1rem;
+            font-size: 0.98rem;
             font-weight: 800;
-            color: var(--accent);
+            color: #DDE9FF;
         }
 
         .hero-card p {
-            margin: 0.75rem 0 0;
-            color: var(--muted);
+            margin: 1rem 0 0;
+            color: rgba(255,255,255,0.72);
             line-height: 1.7;
             font-size: 0.95rem;
         }
 
         .hero-illustration {
-            position: relative;
             min-height: 220px;
-            border-radius: var(--radius);
-            background: #eff6ff;
-            border: 1px solid rgba(37, 99, 235, 0.15);
             display: grid;
             place-items: center;
+            position: relative;
             overflow: hidden;
         }
 
         .hero-illustration svg {
             width: 100%;
-            height: auto;
             max-width: 260px;
+            height: auto;
         }
 
         .auth-panel {
@@ -194,7 +173,7 @@
 
         .auth-panel h2 {
             margin: 0;
-            font-size: clamp(2rem, 3vw, 2.55rem);
+            font-size: clamp(2.1rem, 3vw, 2.6rem);
             font-weight: 800;
         }
 
@@ -212,7 +191,7 @@
         .form-group label {
             display: block;
             margin-bottom: 0.55rem;
-            color: var(--muted);
+            color: var(--text);
             font-size: 0.88rem;
             font-weight: 700;
             letter-spacing: 0.03em;
@@ -226,13 +205,13 @@
             background: var(--surface);
             padding: 1rem 1.1rem;
             color: var(--text);
-            transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+            transition: border-color 0.22s ease, box-shadow 0.22s ease;
         }
 
         .form-control:focus {
             outline: none;
             border-color: rgba(37, 99, 235, 0.55);
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
         }
 
         .form-control::placeholder {
@@ -250,36 +229,59 @@
             justify-content: center;
         }
 
-        .form-check-input {
-            width: 1.15rem;
-            height: 1.15rem;
-            border-radius: 0.35rem;
-            border: 1px solid rgba(15, 23, 42, 0.22);
+        .role-group {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .role-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .role-card {
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            padding: 1rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .role-card input {
+            accent-color: var(--accent);
+        }
+
+        .role-card:hover,
+        .role-card:focus-within {
+            border-color: rgba(37, 99, 235, 0.35);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.08);
+        }
+
+        .role-card label {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
         }
 
         .form-check-label {
-            margin-left: 0.45rem;
+            margin-left: 0.55rem;
             color: var(--text);
             font-size: 0.95rem;
         }
 
         .form-actions {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             justify-content: space-between;
             gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .form-link {
-            color: var(--accent);
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .form-link:hover,
-        .form-link:focus {
-            text-decoration: underline;
+            align-items: center;
         }
 
         .btn-submit {
@@ -293,128 +295,90 @@
             transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
         }
 
-        .btn-submit:hover:not(:disabled) {
+        .btn-submit:hover:not(:disabled),
+        .btn-submit:focus-visible {
             transform: translateY(-1px);
-            box-shadow: 0 20px 42px rgba(37, 99, 235, 0.28);
+            background: #1D4ED8;
         }
 
         .btn-submit:disabled {
             opacity: 0.72;
             cursor: not-allowed;
-            box-shadow: none;
         }
 
-        .form-footer {
-            display: grid;
-            gap: 1rem;
+        .login-cta {
+            color: var(--muted);
+            font-size: 0.95rem;
             margin-top: 0.5rem;
         }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: var(--muted);
-            font-size: 0.92rem;
-            margin: 1rem 0 0;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        .register-cta {
-            border-radius: 22px;
-            padding: 1.3rem 1.25rem;
-            border: 1px solid rgba(59,130,246,0.16);
-            background: rgba(59,130,246,0.06);
-            color: var(--text);
-        }
-
-        .register-cta a {
+        .login-cta a {
             color: var(--accent);
-            font-weight: 700;
             text-decoration: none;
+            font-weight: 700;
         }
 
         .status-alert {
-            border-radius: 18px;
+            border-radius: 16px;
             padding: 1rem 1rem;
             background: rgba(248, 113, 113, 0.13);
-            border: 1px solid rgba(248, 113, 113, 0.24);
-            color: #b91c1c;
+            border: 1px solid rgba(248, 113, 113, 0.22);
+            color: #B91C1C;
             font-size: 0.95rem;
         }
 
         .field-error {
             margin-top: 0.4rem;
-            color: #dc2626;
+            color: #DC2626;
             font-size: 0.88rem;
-        }
-
-        .hero-spot {
-            position: absolute;
-            top: -38px;
-            right: -38px;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: rgba(37, 99, 235, 0.16);
-            filter: blur(12px);
         }
     </style>
 </head>
 <body>
-    <main class="page-shell" aria-label="Login page">
-        <section class="panel" aria-labelledby="welcome-heading">
-            <span class="brand-pill">Marketplace Mahasiswa</span>
-            <p class="eyebrow">Selamat datang kembali</p>
-            <h1 id="welcome-heading" class="headline">Akses peluang freelance dan proyek kampus dalam satu platform.</h1>
-            <p class="lead-text">Login untuk mulai menjelajah layanan, membangun profil profesional, dan melayani mahasiswa lainnya dengan pengalaman yang cepat, aman, dan modern.</p>
+    <main class="page-shell" aria-label="Register page">
+        <section class="panel dark-panel" aria-labelledby="register-welcome-heading">
+            <div class="brand-pill">Marketplace Mahasiswa</div>
+            <p class="eyebrow">Mulai perjalanan Anda</p>
+            <h1 id="register-welcome-heading" class="headline">Mulai perjalanan freelance kampus Anda</h1>
+            <p class="lead-text">Gabung sebagai klien atau freelancer untuk membangun reputasi, menawarkan jasa, dan memesan pekerjaan dengan pengalaman yang modern dan profesional.</p>
+
             <div class="hero-visual" aria-hidden="true">
                 <div class="hero-card">
-                    <div>
-                        <h2>Marketplace terkurasi</h2>
-                        <p>Temukan jasa mahasiswa dengan ulasan, harga transparan, dan alur kerja yang sederhana.</p>
-                    </div>
-                    <div class="hero-spot"></div>
+                    <h2>Marketplace internal kampus</h2>
+                    <p>Percepat kolaborasi di lingkungan kampus dengan sistem order yang jelas, review terpercaya, dan profil profesional.</p>
                 </div>
                 <div class="hero-illustration">
-                    <svg viewBox="0 0 360 260" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi freelance kampus">
-                        <path d="M54 179c-3 0-5-2-5-5v-32c0-3 2-5 5-5h252c3 0 5 2 5 5v32c0 3-2 5-5 5H54Zm0 0" fill="rgba(37,99,235,0.12)"/>
-                        <path d="M118 63h124v80H118z" fill="#ffffff"/>
-                        <path d="M118 63h124v80H118z" stroke="#2563eb" stroke-width="4"/>
-                        <path d="M136 91h88" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
-                        <path d="M136 119h64" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
-                        <path d="M136 147h48" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
-                        <path d="M62 166c-16 0-28 13-28 29v15h54v-15c0-16-12-29-26-29h0Zm232 0c-16 0-28 13-28 29v15h54v-15c0-16-12-29-26-29h0Z" fill="#dbeafe"/>
-                        <path d="M62 166c-16 0-28 13-28 29v15h54v-15c0-16-12-29-26-29h0Zm232 0c-16 0-28 13-28 29v15h54v-15c0-16-12-29-26-29h0Z" stroke="#93c5fd" stroke-width="2"/>
-                        <path d="M82 213v12" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
-                        <path d="M278 213v12" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
-                        <circle cx="114" cy="157" r="12" fill="#93c5fd"/>
-                        <circle cx="246" cy="157" r="12" fill="#93c5fd"/>
+                    <svg viewBox="0 0 360 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="22" y="42" width="316" height="148" rx="22" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                        <path d="M76 86h208" stroke="#60A5FA" stroke-width="8" stroke-linecap="round" opacity="0.9"/>
+                        <path d="M76 126h152" stroke="#60A5FA" stroke-width="8" stroke-linecap="round" opacity="0.72"/>
+                        <path d="M76 166h106" stroke="#60A5FA" stroke-width="8" stroke-linecap="round" opacity="0.55"/>
+                        <circle cx="92" cy="210" r="26" fill="rgba(255,255,255,0.16)"/>
+                        <circle cx="168" cy="214" r="20" fill="rgba(255,255,255,0.18)"/>
+                        <circle cx="248" cy="204" r="16" fill="rgba(255,255,255,0.22)"/>
                     </svg>
                 </div>
             </div>
         </section>
 
-        <section class="panel auth-panel" aria-labelledby="login-heading">
+        <section class="panel auth-panel" aria-labelledby="register-heading">
             <div>
-                <h2 id="login-heading">Masuk</h2>
-                <p>Gunakan email kampus Anda untuk masuk dan melanjutkan ke dashboard marketplace.</p>
+                <h2 id="register-heading">Daftar</h2>
+                <p>Isi data Anda untuk membuat akun marketplace kampus baru dan mulai menawarkan atau memesan jasa.</p>
             </div>
 
             @if(session('status'))
                 <div class="status-alert" role="alert">{{ session('status') }}</div>
             @endif
 
-            <form action="{{ route('login.post') }}" method="POST" novalidate>
+            <form action="{{ route('register.post') }}" method="POST" novalidate>
                 @csrf
                 <div class="form-card">
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap</label>
+                        <input id="name" name="name" type="text" autocomplete="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="Nama lengkap Anda" required>
+                        @error('name')<div class="field-error">{{ $message }}</div>@enderror
+                    </div>
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input id="email" name="email" type="email" autocomplete="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" placeholder="nama@kampus.ac.id" required>
@@ -423,29 +387,43 @@
                     <div class="form-group">
                         <label for="password">Kata sandi</label>
                         <div class="input-group">
-                            <input id="password" name="password" type="password" autocomplete="current-password" class="form-control @error('password') is-invalid @enderror" placeholder="••••••••" required>
+                            <input id="password" name="password" type="password" autocomplete="new-password" class="form-control @error('password') is-invalid @enderror" placeholder="••••••••" required>
                             <button class="input-group-text" type="button" id="togglePassword" aria-label="Tampilkan kata sandi">Tampilkan</button>
                         </div>
                         @error('password')<div class="field-error">{{ $message }}</div>@enderror
                     </div>
-                    <div class="form-actions">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="1" id="remember" name="remember">
-                            <label class="form-check-label" for="remember">Ingat saya</label>
-                        </div>
-                        <a href="#" class="form-link">Lupa password?</a>
+                    <div class="form-group">
+                        <label for="password_confirmation">Konfirmasi kata sandi</label>
+                        <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" class="form-control" placeholder="••••••••" required>
                     </div>
-                    <button type="submit" class="btn btn-submit" id="submitBtn">
-                        <span class="submit-text">Masuk</span>
+                    <div class="form-group">
+                        <label class="d-block mb-2">Pilih peran</label>
+                        <div class="role-group" role="radiogroup" aria-labelledby="role-group-label">
+                            <label class="role-card">
+                                <input type="radio" name="role" value="client" {{ old('role') !== 'seller' ? 'checked' : '' }}>
+                                <span>Client</span>
+                            </label>
+                            <label class="role-card">
+                                <input type="radio" name="role" value="seller" {{ old('role') === 'seller' ? 'checked' : '' }}>
+                                <span>Seller/Freelancer</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="terms" id="terms" {{ old('terms') ? 'checked' : '' }} required>
+                        <label class="form-check-label" for="terms">Saya menyetujui Syarat & Ketentuan</label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <span class="submit-text">Daftar</span>
                         <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
                     </button>
                 </div>
             </form>
 
-            <div class="divider">Belum punya akun?</div>
-            <div class="register-cta">
-                Buat akun untuk mulai mempromosikan layanan atau memesan jasa kampus. <a href="/register">Daftar Sekarang</a>
-            </div>
+            <p class="login-cta">Sudah punya akun? <a href="/login">Login</a></p>
         </section>
     </main>
 

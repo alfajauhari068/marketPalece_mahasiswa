@@ -19,9 +19,17 @@ Route::get('/login', function () {
     return view('login');
 });
 
+Route::get('/register', function () {
+    return view('register');
+});
+
 Route::post('/login', function (Illuminate\Http\Request $request) {
     return back()->with('status', 'Login diproses');
 })->name('login.post');
+
+Route::post('/register', function (Illuminate\Http\Request $request) {
+    return back()->with('status', 'Pendaftaran diproses');
+})->name('register.post');
 
 Route::get('/',  [DashboardKlienController::class, 'index'])->name('dashboard-klien');
 
