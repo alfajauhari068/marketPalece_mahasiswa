@@ -1,0 +1,23 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
+class ProfileFactory extends Factory
+{
+    protected $model = Profile::class;
+
+    public function definition(): array
+    {
+        return [
+            'user_id' => User::factory(),
+            'bio' => $this->faker->sentence(),
+            'skills' => json_encode([$this->faker->words(3, true)]),
+            'photo' => $this->faker->imageUrl(200, 200),
+            'rating_avg' => $this->faker->randomFloat(2, 1, 5),
+        ];
+    }
+}

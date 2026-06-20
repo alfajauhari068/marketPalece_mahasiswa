@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardKlienController;
+use App\Http\Controllers\DashboardUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,3 +24,9 @@ Route::post('/login', function (Illuminate\Http\Request $request) {
 })->name('login.post');
 
 Route::get('/',  [DashboardKlienController::class, 'index'])->name('dashboard-klien');
+
+Route::get('/user',  [DashboardUserController::class, 'index'])->name('dashboard-user');
+
+Route::get('/review/{order_id}', function ($order_id) {
+    return "Review untuk order dengan ID: " . $order_id;
+})->name('review');
