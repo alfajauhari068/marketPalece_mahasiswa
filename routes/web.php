@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardClientController;
 use App\Http\Controllers\DashboardKlienController;
 use App\Http\Controllers\DashboardUserController;
 use Illuminate\Support\Facades\Route;
@@ -15,21 +17,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', function () {
-    return view('login');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+    Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 });
 
-Route::get('/register', function () {
-    return view('register');
+Route::middleware(['auth'])->group(function () {
+    Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/seller', [DashboardUserController::class, 'index'])->name('seller.home');
+
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('/', [DashboardClientController::class, 'index'])->name('home');
+        Route::get('/orders', [DashboardClientController::class, 'orders'])->name('orders');
+        Route::get('/orders/{id}', [DashboardClientController::class, 'orderDetail'])->name('order.detail');
+        Route::get('/messages', [DashboardClientController::class, 'messages'])->name('messages');
+        Route::get('/messages/{id}', [DashboardClientController::class, 'messageDetail'])->name('message.detail');
+        Route::get('/notifications', [DashboardClientController::class, 'notifications'])->name('notifications');
+        Route::get('/profile', [DashboardClientController::class, 'profile'])->name('profile');
+        Route::get('/profile/edit', [DashboardClientController::class, 'profileEdit'])->name('profile.edit');
+        Route::post('/profile/edit', [DashboardClientController::class, 'profileUpdate'])->name('profile.update');
+    });
 });
-
-Route::post('/login', function (Illuminate\Http\Request $request) {
-    return back()->with('status', 'Login diproses');
-})->name('login.post');
-
-Route::post('/register', function (Illuminate\Http\Request $request) {
-    return back()->with('status', 'Pendaftaran diproses');
-})->name('register.post');
 
 Route::get('/',  [DashboardKlienController::class, 'index'])->name('dashboard-klien');
 

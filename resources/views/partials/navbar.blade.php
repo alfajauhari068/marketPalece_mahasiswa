@@ -30,7 +30,7 @@
                     <i class="bi bi-moon"></i>
                 </button>
                 <a class="nav-link text-secondary" href="/login">Masuk</a>
-                <a class="btn btn-primary rounded-pill px-4" href="#">Daftar</a>
+                <a class="btn btn-primary rounded-pill px-4" href="/register">Daftar</a>
             </div>
         </div>
     </div>
