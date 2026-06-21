@@ -64,11 +64,13 @@ class User extends Authenticatable
 
     public function isBuyer(): bool
     {
-        return $this->role === 'buyer';
+        // Accept multiple synonyms for buyer (legacy DB values and frontend values)
+        return in_array($this->role, ['buyer', 'user', 'mahasiswa', 'client'], true);
     }
 
     public function isSeller(): bool
     {
-        return $this->role === 'seller';
+        // Accept multiple synonyms for seller
+        return in_array($this->role, ['seller', 'freelancer'], true);
     }
 }
