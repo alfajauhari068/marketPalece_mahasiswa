@@ -46,6 +46,20 @@
     footer {
         margin-top: -1px; 
     }
+
+    .service-card {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 18px 40px rgba(13, 110, 253, 0.12);
+    }
+
+    .detail-indicator {
+        font-size: 0.85rem;
+    }
 </style>
 </head>
 <body>

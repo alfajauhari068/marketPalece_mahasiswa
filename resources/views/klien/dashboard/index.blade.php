@@ -63,15 +63,21 @@
                 <div class="row g-3">
                     @forelse($recommendedServices as $service)
                         <div class="col-12 col-sm-6">
-                            <div class="card dashboard-service-card rounded-4 shadow-sm overflow-hidden">
+                            <div class="card dashboard-service-card rounded-4 shadow-sm overflow-hidden service-card position-relative">
                                 <img src="{{ $service['primary_image'] }}" alt="{{ $service['title'] }}" class="card-img-top service-thumb" />
                                 <div class="card-body">
                                     <small class="text-primary fw-semibold">{{ $service['category'] }}</small>
                                     <h5 class="card-title mt-2 mb-2">{{ $service['title'] }}</h5>
-                                    <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
                                         <p class="text-muted mb-0 small">{{ $service['seller'] }}</p>
                                         <span class="fw-semibold text-primary">{{ $service['price'] }}</span>
                                     </div>
+                                    <p class="text-muted mb-3 small detail-indicator">Klik untuk melihat detail</p>
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        <a href="{{ route('services.show', $service['id']) }}" class="btn btn-outline-primary rounded-pill flex-grow-1">View Detail</a>
+                                        <a href="{{ route('checkout.create', $service['id']) }}" class="btn btn-primary rounded-pill flex-grow-1">Pesan Sekarang</a>
+                                    </div>
+                                    <a href="{{ route('services.show', $service['id']) }}" class="stretched-link"></a>
                                 </div>
                             </div>
                         </div>

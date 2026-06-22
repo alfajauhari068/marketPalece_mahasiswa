@@ -9,6 +9,8 @@ use App\Http\Controllers\Seller\SellerServiceController;
 use App\Http\Controllers\Seller\SellerOrderController;
 use App\Http\Controllers\Seller\SellerReviewController;
 use App\Http\Controllers\Seller\SellerEarningController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,6 +66,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/seller', function () {
         return redirect()->route('seller.dashboard');
     })->name('seller.home');
+
+    Route::get('/services/{service}', [ServiceController::class, 'show'])
+        ->name('services.show');
+
+    Route::get('/checkout/{service}', [CheckoutController::class, 'create'])
+        ->name('checkout.create');
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', [DashboardClientController::class, 'index'])->name('home');
