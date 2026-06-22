@@ -87,7 +87,7 @@ class AuthController extends Controller
             }
 
             if ($user->isSeller()) {
-                return redirect()->intended('/seller');
+                return redirect()->intended('/seller/dashboard');
             }
 
             return redirect()->intended('/dashboard');

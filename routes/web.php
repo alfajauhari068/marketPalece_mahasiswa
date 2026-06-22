@@ -4,6 +4,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardClientController;
 use App\Http\Controllers\DashboardKlienController;
 use App\Http\Controllers\DashboardUserController;
+use App\Http\Controllers\Seller\SellerDashboardController;
+use App\Http\Controllers\Seller\SellerServiceController;
+use App\Http\Controllers\Seller\SellerOrderController;
+use App\Http\Controllers\Seller\SellerReviewController;
+use App\Http\Controllers\Seller\SellerEarningController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,10 +33,41 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/seller', [DashboardUserController::class, 'index'])->name('seller.home');
+    Route::prefix('seller')->name('seller.')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
+
+        // Services CRUD
+        Route::get('/services', [SellerServiceController::class, 'index'])->name('services.index');
+        Route::get('/services/create', [SellerServiceController::class, 'create'])->name('services.create');
+        Route::post('/services', [SellerServiceController::class, 'store'])->name('services.store');
+        Route::get('/services/{service}/edit', [SellerServiceController::class, 'edit'])->name('services.edit');
+        Route::put('/services/{service}', [SellerServiceController::class, 'update'])->name('services.update');
+        Route::delete('/services/{service}', [SellerServiceController::class, 'destroy'])->name('services.destroy');
+
+        // Orders
+        Route::get('/orders', [SellerOrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [SellerOrderController::class, 'show'])->name('orders.show');
+
+        // Reviews
+        Route::get('/reviews', [SellerReviewController::class, 'index'])->name('reviews.index');
+
+        // Earnings
+        Route::get('/earnings', [SellerEarningController::class, 'index'])->name('earnings.index');
+
+        // Profile and Settings
+        Route::get('/profile', [SellerDashboardController::class, 'profile'])->name('profile');
+        Route::post('/profile/photo', [SellerDashboardController::class, 'updateProfilePhoto'])->name('profile.photo');
+        Route::get('/settings', [SellerDashboardController::class, 'settings'])->name('settings');
+    });
+
+    Route::get('/seller', function () {
+        return redirect()->route('seller.dashboard');
+    })->name('seller.home');
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', [DashboardClientController::class, 'index'])->name('home');
+        Route::get('/search', [DashboardClientController::class, 'search'])->name('search');
         Route::get('/orders', [DashboardClientController::class, 'orders'])->name('orders');
         Route::get('/orders/{id}', [DashboardClientController::class, 'orderDetail'])->name('order.detail');
         Route::get('/messages', [DashboardClientController::class, 'messages'])->name('messages');

@@ -6,18 +6,18 @@
         <div class="d-flex flex-column flex-lg-row justify-content-between gap-4 align-items-start">
             <div class="hero-copy p-4 rounded-4 shadow-sm bg-white">
                 <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Client Dashboard</span>
-                <h2 class="fw-bold">Welcome back, Arif</h2>
+                <h2 class="text-primary fw-bold">Welcome back, Arif</h2>
                 <p class="text-muted">Lihat ringkasan pesanan Anda, perkembangan proyek, dan komunikasi terbaru dalam satu workspace profesional.</p>
             </div>
             <div class="hero-spark p-4 rounded-4 shadow-sm bg-gradient">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div>
-                        <p class="text-muted mb-1">Today’s activity</p>
+                        <p class="text-scondary mb-1">Today’s activity</p>
                         <h3 class="mb-0">+12 updates</h3>
                     </div>
                     <span class="badge bg-white text-primary py-2 px-3 rounded-pill">Premium</span>
                 </div>
-                <p class="text-white mb-0">Ikuti proyek Anda, temukan aktivitas terbaru, dan lanjutkan dialog dengan freelancer tanpa berpindah tab.</p>
+                <p class="text-scondary mb-0">Ikuti proyek Anda, temukan aktivitas terbaru, dan lanjutkan dialog dengan freelancer tanpa berpindah tab.</p>
             </div>
         </div>
     </section>
@@ -41,11 +41,15 @@
             <a href="{{ route('dashboard.orders') }}" class="text-primary text-decoration-none">Lihat semua orders</a>
         </div>
         <div class="row g-3">
-            @foreach($recentOrders as $order)
+            @forelse($recentOrders as $order)
                 <div class="col-12 col-md-4">
                     @include('klien.dashboard.components.order-card', ['order' => $order, 'detailRoute' => route('dashboard.order.detail', ['id' => $order['id']])])
                 </div>
-            @endforeach
+            @empty
+                <div class="col-12">
+                    <div class="text-muted">No recent orders</div>
+                </div>
+            @endforelse
         </div>
     </section>
 
@@ -57,10 +61,10 @@
                     <a href="#" class="text-primary text-decoration-none">Explore all</a>
                 </div>
                 <div class="row g-3">
-                    @foreach($recommendedServices as $service)
+                    @forelse($recommendedServices as $service)
                         <div class="col-12 col-sm-6">
                             <div class="card dashboard-service-card rounded-4 shadow-sm overflow-hidden">
-                                <img src="{{ $service['image'] }}" alt="{{ $service['title'] }}" class="card-img-top service-thumb" />
+                                <img src="{{ $service['primary_image'] }}" alt="{{ $service['title'] }}" class="card-img-top service-thumb" />
                                 <div class="card-body">
                                     <small class="text-primary fw-semibold">{{ $service['category'] }}</small>
                                     <h5 class="card-title mt-2 mb-2">{{ $service['title'] }}</h5>
@@ -71,8 +75,15 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="col-12">
+                            <div class="text-muted">No recommended services</div>
+                        </div>
+                    @endforelse
                 </div>
+                @if(method_exists($recommendedServices, 'links'))
+                    <div class="mt-3">{{ $recommendedServices->links() }}</div>
+                @endif
             </section>
         </div>
 

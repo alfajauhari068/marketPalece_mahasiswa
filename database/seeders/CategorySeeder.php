@@ -16,8 +16,6 @@ class CategorySeeder extends Seeder
             ['Penerjemahan'],
             ['Video Editing'],
             ['Musik dan Audio'],
-            ['Konsultasi'],
-            ['Lainnya'],
         ];
 
         foreach ($categories as $category) {
