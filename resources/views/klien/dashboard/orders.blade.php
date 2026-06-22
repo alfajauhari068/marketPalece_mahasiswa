@@ -16,11 +16,16 @@
     </div>
 
     <div class="row g-3">
-        @foreach($orders as $order)
+        @forelse($orders as $order)
             <div class="col-12 col-md-6 col-xl-4">
                 @include('klien.dashboard.components.order-card', ['order' => $order, 'detailRoute' => route('dashboard.order.detail', ['id' => $order['id']])])
             </div>
-        @endforeach
+        @empty
+            <div class="col-12"><div class="text-muted">No orders found</div></div>
+        @endforelse
     </div>
+    @if(method_exists($orders, 'links'))
+        <div class="mt-3">{{ $orders->links() }}</div>
+    @endif
 </div>
 @endsection

@@ -19,7 +19,8 @@ class ServiceFactory extends Factory
             'description' => $this->faker->paragraph(),
             'price' => $this->faker->randomFloat(2, 10000, 1000000),
             'category_id' => Category::factory(),
-            'status' => $this->faker->randomElement(['active', 'inactive']),
+            // status enum migrated to ['draft', 'paused', 'live']
+            'status' => $this->faker->randomElement(['draft', 'paused', 'live']),
         ];
     }
 }

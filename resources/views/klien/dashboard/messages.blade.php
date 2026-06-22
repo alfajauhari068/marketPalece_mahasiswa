@@ -17,16 +17,21 @@
                         <input type="search" class="form-control form-control-sm rounded-pill" placeholder="Search chat" aria-label="Search chat" />
                     </div>
                     <div class="list-group chat-list">
-                        @foreach($chats as $chat)
-                            <a href="{{ route('dashboard.message.detail', ['id' => $chat['id']]) }}" class="list-group-item list-group-item-action rounded-4 mb-2 {{ $chat['unread'] ? 'chat-unread' : '' }}">
+                        @forelse($chats as $item)
+                            <a href="{{ route('dashboard.message.detail', ['id' => $item['id']]) }}" class="list-group-item list-group-item-action rounded-4 mb-2 {{ $item['unread'] ? 'chat-unread' : '' }}">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <strong>{{ $chat['name'] }}</strong>
-                                    <small class="text-muted">{{ $chat['time'] }}</small>
+                                    <strong>{{ $item['name'] }}</strong>
+                                    <small class="text-muted">{{ $item['time'] }}</small>
                                 </div>
-                                <p class="mb-0 text-muted small">{{ $chat['preview'] }}</p>
+                                <p class="mb-0 text-muted small">{{ $item['preview'] }}</p>
                             </a>
-                        @endforeach
+                        @empty
+                            <div class="list-group-item border-0 text-muted">No conversations yet</div>
+                        @endforelse
                     </div>
+                    @if(method_exists($chats, 'links'))
+                        <div class="mt-3">{{ $chats->links() }}</div>
+                    @endif
                 </div>
             </div>
         </div>

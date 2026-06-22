@@ -16,7 +16,7 @@
                         <input type="search" class="form-control form-control-sm rounded-pill" placeholder="Search chat" aria-label="Search chat" />
                     </div>
                     <div class="list-group chat-list">
-                        @foreach($chats as $item)
+                        @forelse($chats as $item)
                             <a href="{{ route('dashboard.message.detail', ['id' => $item['id']]) }}" class="list-group-item list-group-item-action rounded-4 mb-2 {{ $item['id'] === $chat['id'] ? 'active' : '' }}">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <strong>{{ $item['name'] }}</strong>
@@ -24,7 +24,9 @@
                                 </div>
                                 <p class="mb-0 text-muted small">{{ $item['preview'] }}</p>
                             </a>
-                        @endforeach
+                        @empty
+                            <div class="list-group-item border-0 text-muted">No conversations</div>
+                        @endforelse
                     </div>
                 </div>
             </div>

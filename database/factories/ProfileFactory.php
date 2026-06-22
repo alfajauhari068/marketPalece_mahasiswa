@@ -15,7 +15,8 @@ class ProfileFactory extends Factory
         return [
             'user_id' => User::factory(),
             'bio' => $this->faker->sentence(),
-            'skills' => json_encode([$this->faker->words(3, true)]),
+            // store skills as array to match Profile casts
+            'skills' => [$this->faker->word(), $this->faker->word()],
             'photo' => $this->faker->imageUrl(200, 200),
             'rating_avg' => $this->faker->randomFloat(2, 1, 5),
         ];

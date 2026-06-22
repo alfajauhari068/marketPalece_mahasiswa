@@ -7,7 +7,7 @@
         <p class="text-muted mb-0">Notifikasi terbaru dari aktivitas pesanan dan pesan Anda.</p>
     </div>
     <div class="list-group notification-list rounded-4 shadow-sm bg-white">
-        @foreach($notifications as $notification)
+        @forelse($notifications as $notification)
             <div class="list-group-item d-flex justify-content-between align-items-center border-0 rounded-4 mb-2 p-4 {{ $notification['unread'] ? 'notification-unread' : '' }}">
                 <div>
                     <p class="mb-1 fw-semibold">{{ $notification['title'] }}</p>
@@ -17,7 +17,9 @@
                     <span class="badge bg-primary">New</span>
                 @endif
             </div>
-        @endforeach
+        @empty
+            <div class="list-group-item border-0 text-muted">No notifications</div>
+        @endforelse
     </div>
 </div>
 @endsection
