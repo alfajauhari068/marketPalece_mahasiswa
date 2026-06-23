@@ -14,9 +14,10 @@ class Order extends Model
 
     protected $table = 'orders';
 
-    protected $fillable = ['buyer_id', 'seller_id', 'service_id', 'status', 'total_price'];
+    protected $fillable = ['order_code', 'buyer_id', 'seller_id', 'service_id', 'quantity', 'subtotal', 'status', 'total_price'];
 
     protected $casts = [
+        'subtotal' => 'decimal:2',
         'total_price' => 'decimal:2',
     ];
 
@@ -48,5 +49,29 @@ class Order extends Model
     public function review(): HasOne
     {
         return $this->hasOne(Review::class);
+    }
+
+    /**
+     * Boot method to auto-generate order code on creation.
+     * Pattern: ORD-YYYYMMDD-XXXX (e.g., ORD-20260622-0001)
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($order) {
+            if (empty($order->order_code)) {
+                $today = now()->format('Ymd');
+                
+                // Get the count of orders created today
+                $countToday = static::whereDate('created_at', now()->toDateString())->count();
+                
+                // Generate unique sequence number (1-based)
+                $sequence = str_pad($countToday + 1, 4, '0', STR_PAD_LEFT);
+                
+                // Set order code
+                $order->order_code = "ORD-{$today}-{$sequence}";
+            }
+        });
     }
 }

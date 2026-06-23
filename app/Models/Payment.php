@@ -12,9 +12,10 @@ class Payment extends Model
 
     protected $table = 'payments';
 
-    protected $fillable = ['order_id', 'method', 'status', 'paid_at'];
+    protected $fillable = ['order_id', 'transaction_id', 'method', 'amount', 'status', 'paid_at'];
 
     protected $casts = [
+        'amount' => 'decimal:2',
         'paid_at' => 'datetime',
     ];
 
