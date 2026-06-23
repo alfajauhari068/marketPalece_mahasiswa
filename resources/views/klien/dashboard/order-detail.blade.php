@@ -3,7 +3,7 @@
 @section('content')
 <div class="dashboard-page">
     <div class="mb-4">
-        <a href="{{ route('dashboard.orders') }}" class="text-decoration-none text-primary"><i class="bi bi-chevron-left"></i> Back to orders</a>
+        <a href="{{ route('dashboard') }}" class="text-decoration-none text-primary"><i class="bi bi-chevron-left"></i> Back to orders</a>
     </div>
     <div class="row g-4">
         <div class="col-lg-8">
