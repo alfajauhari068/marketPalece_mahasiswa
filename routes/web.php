@@ -10,6 +10,8 @@ use App\Http\Controllers\Seller\SellerOrderController;
 use App\Http\Controllers\Seller\SellerReviewController;
 use App\Http\Controllers\Seller\SellerEarningController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
@@ -72,6 +74,24 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/checkout/{service}', [CheckoutController::class, 'create'])
         ->name('checkout.create');
+    Route::post('/checkout/{service}', [CheckoutController::class, 'store'])
+        ->name('checkout.store');
+
+    // Payment routes
+    Route::get('/payment/{order}', [PaymentController::class, 'show'])
+        ->name('payment.show');
+    Route::post('/payment/{order}', [PaymentController::class, 'process'])
+        ->name('payment.process');
+    Route::get('/payment/success/{order}', [PaymentController::class, 'success'])
+        ->name('payment.success');
+    Route::get('/payment/failed/{order}', [PaymentController::class, 'failed'])
+        ->name('payment.failed');
+
+    // Invoice routes
+    Route::get('/invoice/{order}', [InvoiceController::class, 'show'])
+        ->name('invoice.show');
+    Route::get('/invoice/{order}/download', [InvoiceController::class, 'download'])
+        ->name('invoice.download');
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', [DashboardClientController::class, 'index'])->name('home');

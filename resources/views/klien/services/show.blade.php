@@ -3,7 +3,8 @@
 @section('content')
 <div class="py-4">
     <div class="mb-4">
-        <a href="{{ url()->previous() ?? route('dashboard.home') }}" class="text-decoration-none text-primary">
+        <a href="{{ route('dashboard.home') }}" 
+        class="text-decoration-none text-primary">
             <i class="bi bi-chevron-left"></i> Kembali ke Marketplace
         </a>
     </div>
