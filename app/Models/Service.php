@@ -53,4 +53,9 @@ class Service extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(\App\Models\Review::class);
+    }
 }

@@ -10,7 +10,10 @@ use App\Models\Profile;
 use App\Models\Review;
 use App\Models\Service;
 use App\Models\User;
-use Illuminate\Database\Seeder;use Illuminate\Support\Collection;use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ClientWorkspaceSeeder extends Seeder
@@ -23,9 +26,20 @@ class ClientWorkspaceSeeder extends Seeder
         // Create categories
         $categories = Category::factory()->count(5)->create();
 
-        // Create 10 buyer users (using 'mahasiswa' role from enum)
-        $buyers = [];
-        for ($i = 1; $i <= 10; $i++) {
+        // Clear dependent tables to avoid duplicate unique keys from previous seeds
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('services')->truncate();
+        DB::table('orders')->truncate();
+        DB::table('payments')->truncate();
+        DB::table('reviews')->truncate();
+        DB::table('chats')->truncate();
+        DB::table('profiles')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        // Reuse users created by UserSeeder. Ensure minimum counts (buyers:5, sellers:3)
+        $buyers = User::where('role', 'mahasiswa')->take(5)->get()->all();
+        while (count($buyers) < 5) {
+            $i = count($buyers) + 1;
             $user = User::create([
                 'name' => "Buyer {$i}",
                 'email' => "buyer{$i}@marketplace.test",
@@ -33,22 +47,12 @@ class ClientWorkspaceSeeder extends Seeder
                 'role' => 'mahasiswa',
                 'email_verified_at' => now(),
             ]);
-
-            // Create profile for buyer
-            Profile::create([
-                'user_id' => $user->id,
-                'bio' => "I'm a buyer looking for quality services",
-                'rating_avg' => rand(3, 5) + rand(0, 99) / 100,
-                'skills' => ['Needs services', 'Quality conscious'],
-                'photo' => null,
-            ]);
-
             $buyers[] = $user;
         }
 
-        // Create 5 seller users (using 'freelancer' role from enum)
-        $sellers = [];
-        for ($i = 1; $i <= 5; $i++) {
+        $sellers = User::where('role', 'freelancer')->take(3)->get()->all();
+        while (count($sellers) < 3) {
+            $i = count($sellers) + 1;
             $user = User::create([
                 'name' => "Seller {$i}",
                 'email' => "seller{$i}@marketplace.test",
@@ -56,37 +60,47 @@ class ClientWorkspaceSeeder extends Seeder
                 'role' => 'freelancer',
                 'email_verified_at' => now(),
             ]);
+            $sellers[] = $user;
+        }
 
-            // Create profile for seller
-            Profile::create([
-                'user_id' => $user->id,
+        // Ensure profiles exist for buyers and sellers
+        foreach ($buyers as $buyer) {
+            Profile::firstOrCreate([
+                'user_id' => $buyer->id,
+            ], [
+                'bio' => "I'm a buyer looking for quality services",
+                'rating_avg' => rand(3, 5) + rand(0, 99) / 100,
+                'skills' => ['Needs services', 'Quality conscious'],
+                'photo' => null,
+            ]);
+        }
+
+        foreach ($sellers as $seller) {
+            Profile::firstOrCreate([
+                'user_id' => $seller->id,
+            ], [
                 'bio' => "Professional service provider with years of experience",
                 'rating_avg' => rand(4, 5) + rand(0, 99) / 100,
                 'skills' => ['Service delivery', 'Communication', 'Quality work'],
                 'photo' => null,
             ]);
-
-            $sellers[] = $user;
         }
 
-        // Create 20 services from sellers
+        // Create between 10 and 20 services distributed among sellers
         $services = [];
-        $serviceCount = 0;
+        $serviceCount = rand(10, 20);
         $categoriesCollection = $categories instanceof Collection ? $categories : collect($categories);
-        
-        foreach ($sellers as $seller) {
-            for ($i = 0; $i < 4; $i++) {
-                $service = Service::create([
-                    'user_id' => $seller->id,
-                    'category_id' => $categoriesCollection->random()->id,
-                    'title' => "Service {$serviceCount} from {$seller->name}",
-                    'description' => "Professional service offering from {$seller->name}. High quality, fast delivery, and excellent customer support.",
-                    'price' => rand(50000, 500000),
-                    'status' => 'live',
-                ]);
-                $services[] = $service;
-                $serviceCount++;
-            }
+        for ($i = 0; $i < $serviceCount; $i++) {
+            $seller = $sellers[array_rand($sellers)];
+            $service = Service::create([
+                'user_id' => $seller->id,
+                'category_id' => $categoriesCollection->random()->id,
+                'title' => "Service {$i} from {$seller->name}",
+                'description' => "Professional service offering from {$seller->name}. High quality, fast delivery, and excellent customer support.",
+                'price' => rand(50000, 500000),
+                'status' => 'live',
+            ]);
+            $services[] = $service;
         }
 
         // Create 30 orders
@@ -94,7 +108,7 @@ class ClientWorkspaceSeeder extends Seeder
         $buyersCollection = collect($buyers);
         $sellersCollection = collect($sellers);
         $servicesCollection = collect($services);
-        
+
         // Ensure distribution with at least 20 completed orders for payments/reviews
         $statusPool = array_merge(
             array_fill(0, 20, 'selesai'), // 20 completed
@@ -104,6 +118,8 @@ class ClientWorkspaceSeeder extends Seeder
         );
         shuffle($statusPool);
 
+        // Track sequence counts per date to build unique order codes
+        $countsByDate = [];
         for ($i = 0; $i < 30; $i++) {
             $buyer = $buyersCollection->random();
             $seller = $sellersCollection->random();
@@ -111,43 +127,45 @@ class ClientWorkspaceSeeder extends Seeder
 
             $status = $statusPool[$i] ?? 'pending';
 
+            // Determine a realistic created_at date for the order
+            $orderCreatedAt = now()->subDays(rand(0, 90));
+            $dateKey = $orderCreatedAt->toDateString();
+            $countsByDate[$dateKey] = ($countsByDate[$dateKey] ?? 0) + 1;
+            $sequence = str_pad($countsByDate[$dateKey], 4, '0', STR_PAD_LEFT);
+            $orderCode = 'ORD-' . $orderCreatedAt->format('Ymd') . '-' . $sequence;
+
             $order = Order::create([
                 'buyer_id' => $buyer->id,
                 'seller_id' => $seller->id,
                 'service_id' => $service->id,
                 'status' => $status,
                 'total_price' => $service->price,
-                'created_at' => now()->subDays(rand(0, 90)),
+                'created_at' => $orderCreatedAt,
+                'order_code' => $orderCode,
+            ]);
+
+            // Create a payment for every order to reach 30 payments
+            Payment::create([
+                'order_id' => $order->id,
+                'method' => collect(['credit_card', 'bank_transfer', 'ewallet'])->random(),
+                'status' => 'paid',
+                'paid_at' => $orderCreatedAt->addDays(1),
+                'created_at' => $orderCreatedAt->addDays(1),
             ]);
 
             $orders[] = $order;
         }
 
-        // Create 20 payments for completed orders (use existing payments schema)
-        $paymentCount = 0;
-        foreach ($orders as $order) {
-            if ($order->status === 'selesai' && $paymentCount < 20) {
-                Payment::create([
-                    'order_id' => $order->id,
-                    'method' => collect(['credit_card', 'bank_transfer', 'ewallet'])->random(),
-                    'status' => 'paid',
-                    'paid_at' => $order->created_at->addDays(2),
-                    'created_at' => $order->created_at->addDays(2),
-                ]);
-                $paymentCount++;
-            }
-        }
-
-        // Create 15 reviews from buyers (schema: order_id, reviewer_id, rating, comment)
+        // Create up to 20 reviews for completed orders
         $reviewCount = 0;
         foreach ($orders as $order) {
-            if ($order->status === 'selesai' && $reviewCount < 15) {
+            if ($order->status === 'selesai' && $reviewCount < 20) {
                 Review::create([
                     'order_id' => $order->id,
                     'reviewer_id' => $order->buyer_id,
                     'rating' => rand(3, 5),
                     'comment' => "Great service! Highly recommended. Professional and on-time delivery.",
-                    'created_at' => $order->created_at->addDays(3),
+                    'created_at' => $order->created_at->addDays(2),
                 ]);
                 $reviewCount++;
             }
@@ -173,12 +191,12 @@ class ClientWorkspaceSeeder extends Seeder
 
         echo "✅ ClientWorkspaceSeeder completed successfully!\n";
         echo "📊 Generated data:\n";
-        echo "   • 10 Buyers\n";
-        echo "   • 5 Sellers\n";
-        echo "   • 20 Services\n";
+        echo "   • " . count($buyers) . " Buyers\n";
+        echo "   • " . count($sellers) . " Sellers\n";
+        echo "   • " . $serviceCount . " Services\n";
         echo "   • 30 Orders\n";
-        echo "   • 20 Payments\n";
-        echo "   • 15 Reviews\n";
+        echo "   • 30 Payments\n";
+        echo "   • " . $reviewCount . " Reviews\n";
         echo "   • 25 Chats\n";
     }
 }

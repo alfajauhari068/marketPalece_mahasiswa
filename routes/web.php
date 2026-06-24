@@ -13,6 +13,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -105,12 +106,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/profile/edit', [DashboardClientController::class, 'profileEdit'])->name('profile.edit');
         Route::post('/profile/edit', [DashboardClientController::class, 'profileUpdate'])->name('profile.update');
     });
+
+    // Review routes (buyer-facing)
+    Route::get('/review/create/{order}', [ReviewController::class, 'create'])->name('review.create');
+    Route::post('/review/create/{order}', [ReviewController::class, 'store'])->name('review.store');
+    Route::get('/review/{review}', [ReviewController::class, 'show'])->name('review.show');
 });
 
 Route::get('/',  [DashboardKlienController::class, 'index'])->name('dashboard-klien');
 
 Route::get('/user',  [DashboardUserController::class, 'index'])->name('dashboard-user');
 
-Route::get('/review/{order_id}', function ($order_id) {
-    return "Review untuk order dengan ID: " . $order_id;
-})->name('review');
+// Deprecated placeholder route removed; review routes implemented above.
