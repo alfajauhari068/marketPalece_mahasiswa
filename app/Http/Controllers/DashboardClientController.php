@@ -265,8 +265,15 @@ class DashboardClientController extends Controller
             $this->enableQueryLogging();
             $user = $this->getAuthenticatedUser();
 
+            $allowedStatuses = ['pending', 'diproses', 'selesai', 'dibatalkan'];
+            $status = $request->query('status', 'diproses');
+            if (! in_array($status, $allowedStatuses, true)) {
+                $status = 'diproses';
+            }
+
             $query = $user->ordersAsBuyer()
                 ->with(['service', 'seller'])
+                ->where('status', $status)
                 ->latest();
 
             // Search: service title or seller name
@@ -291,7 +298,7 @@ class DashboardClientController extends Controller
                 'orders_count' => $paginator->total(),
             ]);
 
-            return view('klien.dashboard.orders', ['orders' => $paginator])->with('active', 'orders');
+            return view('klien.dashboard.orders', ['orders' => $paginator, 'activeStatus' => $status])->with('active', 'orders');
         } catch (\Exception $e) {
             Log::error('Orders page error', ['message' => $e->getMessage()]);
             return redirect()->back()->with('error', 'Failed to load orders');
@@ -436,9 +443,11 @@ class DashboardClientController extends Controller
             $user = $this->getAuthenticatedUser();
             $userId = auth()->id();
 
-            $order = Order::with(['service', 'seller', 'payment'])
+            $order = Order::with(['service', 'seller', 'payment', 'review'])
                 ->where('buyer_id', $userId)
                 ->findOrFail($id);
+
+                $canReview = auth()->user()->can('create', [Review::class, $order]);
 
                 $orderData = [
                 'id' => $order->id,
@@ -458,6 +467,9 @@ class DashboardClientController extends Controller
                     'Payment status' => $order->payment?->status ?? 'Unknown',
                 ],
                 'image' => $order->service?->primary_image ?? 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=820&q=80',
+                'can_review' => $canReview,
+                'review_route' => $canReview ? route('review.create', $order->id) : null,
+                'review_id' => $order->review?->id,
             ];
 
             $this->logQueries('orderDetail', ['user_id' => $user->id, 'order_id' => $order->id]);

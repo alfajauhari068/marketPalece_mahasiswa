@@ -16,7 +16,10 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Clear existing users to ensure clean seeding
+        // Disable foreign key checks to allow truncation when related records exist
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('users')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         // Create Admin User
         DB::table('users')->insert([

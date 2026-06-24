@@ -3,7 +3,7 @@
 @section('content')
 <div class="dashboard-page">
     <div class="mb-4">
-        <a href="{{ route('dashboard') }}" class="text-decoration-none text-primary"><i class="bi bi-chevron-left"></i> Back to orders</a>
+        <a href="{{ route('dashboard.home') }}" class="text-decoration-none text-primary"><i class="bi bi-chevron-left"></i> Back to orders</a>
     </div>
     <div class="row g-4">
         <div class="col-lg-8">
@@ -85,6 +85,16 @@
                         </div>
                     @endforeach
                 </div>
+
+                @if($order['can_review'])
+                    <div class="mt-4">
+                        <a href="{{ $order['review_route'] }}" class="btn btn-success w-100 rounded-pill">Beri Review</a>
+                    </div>
+                @elseif(!empty($order['review_id']))
+                    <div class="mt-4">
+                        <a href="{{ route('review.show', $order['review_id']) }}" class="btn btn-outline-secondary w-100 rounded-pill">Lihat Review</a>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

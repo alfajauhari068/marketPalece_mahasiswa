@@ -8,10 +8,23 @@
             <p class="text-muted">Semua pesanan Anda dikelompokkan menurut status pekerjaan.</p>
         </div>
         <div class="btn-group rounded-pill overflow-hidden shadow-sm" role="group" aria-label="Order status tabs">
-            <button type="button" class="btn btn-outline-secondary">Pending</button>
-            <button type="button" class="btn btn-outline-secondary active">Diproses</button>
-            <button type="button" class="btn btn-outline-secondary">Selesai</button>
-            <button type="button" class="btn btn-outline-secondary">Dibatalkan</button>
+            @php
+                $tabs = [
+                    'pending' => 'Pending',
+                    'diproses' => 'Diproses',
+                    'selesai' => 'Selesai',
+                    'dibatalkan' => 'Dibatalkan',
+                ];
+            @endphp
+
+            @foreach ($tabs as $key => $label)
+                <a
+                    href="{{ route('dashboard.orders', array_filter(['status' => $key, 'search' => request('search')])) }}"
+                    class="btn btn-outline-secondary {{ ($activeStatus ?? 'diproses') === $key ? 'active' : '' }}"
+                >
+                    {{ $label }}
+                </a>
+            @endforeach
         </div>
     </div>
 
